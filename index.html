@@ -55,23 +55,11 @@
             pointer-events: none;
         }
         
-        .hero-bg-text {
-            position: absolute;
-            font-size: 14vw;
-            font-weight: 900;
-            letter-spacing: 10px;
-            color: rgba(255, 255, 255, 0.06);
-            user-select: none;
-            z-index: 1;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
+        .hero-bg-text { position: absolute; font-size: 14vw; font-weight: 900; letter-spacing: 10px; color: rgba(255, 255, 255, 0.06); user-select: none; z-index: 1; pointer-events: none; white-space: nowrap; }
         .hero-content { position: relative; z-index: 2; }
         .hero-content h1 { font-size: 36px; font-weight: 300; margin-bottom: 15px; }
         .hero-content p { font-size: 15px; margin-bottom: 25px; color: #d1d1d1; }
         .btn { display: inline-block; padding: 12px 30px; background-color: #ffffff; color: #111111; text-decoration: none; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        
         /* Seção de Naipes */
         .categories-section { padding: 60px 8% 40px 8%; text-align: center; }
         .categories-section h2 { font-size: 24px; font-weight: 400; }
@@ -85,11 +73,8 @@
         /* Vitrine de Produtos e Filtro */
         .products-section { padding: 50px 8%; background-color: #f7f7f7; text-align: center; border-top: 1px solid #eeeeee; }
         .products-section h2 { font-size: 22px; font-weight: 400; text-transform: uppercase; margin-bottom: 10px; }
-        
         .filter-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 35px; font-size: 13px; color: #555; }
         .filter-container select { padding: 6px 12px; border: 1px solid #e5e5e5; background: #ffffff; outline: none; font-size: 13px; cursor: pointer; }
-        .filter-container select:focus { border-color: #111111; }
-
         .grid-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
         .product-item { background-color: #ffffff; border: 1px solid #e5e5e5; padding: 20px; text-align: left; display: flex; flex-direction: column; justify-content: space-between; }
         .product-img { width: 100%; height: 180px; object-fit: contain; background: #ffffff; margin-bottom: 15px; padding: 10px; }
@@ -105,31 +90,68 @@
         .cart-items-container { flex: 1; padding: 20px; overflow-y: auto; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
         .cart-item-remove { background: none; border: none; color: #cc0000; cursor: pointer; font-size: 11px; }
-        
-        /* Seção de Pagamento Interna */
         .payment-section { padding: 15px 20px; border-top: 1px solid #eee; background-color: #fcfcfc; }
         .payment-section label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #555; }
         .payment-section select { width: 100%; padding: 8px; border: 1px solid #e5e5e5; font-size: 13px; outline: none; background: white; }
-        
-        /* Rodapé do Carrinho */
         .cart-footer { padding: 20px; border-top: 1px solid #eee; background-color: #fafafa; }
         .cart-total { font-size: 16px; font-weight: 600; display: flex; justify-content: space-between; margin-bottom: 15px; }
-        .btn-checkout { width: 100%; padding: 12px; background-color: #25d366; color: #ffffff; border: none; font-weight: 600; cursor: pointer; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; transition: background-color 0.3s; }
-        .btn-checkout:hover { background-color: #128c7e; }
         
-        /* Classes Utilitárias */
+        /* Botões de Finalização Dinâmicos */
+        .btn-checkout { width: 100%; padding: 12px; background-color: #111111; color: #ffffff; border: none; font-weight: 600; cursor: pointer; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; transition: background-color 0.2s; }
+        .btn-checkout.wpp-active { background-color: #25d366; color: white; }
+        .btn-checkout.wpp-active:hover { background-color: #128c7e; }
+        .btn-checkout:hover { background-color: #333333; }
+        
+        /* Tela de Checkout Direto (Gateway) */
+        .checkout-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        .checkout-box { background: white; width: 450px; max-width: 90%; padding: 30px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+        .checkout-box h3 { margin-bottom: 20px; font-size: 18px; font-weight: 600; text-transform: uppercase; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #555; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #e5e5e5; font-size: 13px; outline: none; }
+        .form-group input:focus { border-color: #111111; }
+        .checkout-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-confirm { flex: 1; padding: 12px; background-color: #111111; color: white; border: none; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 13px; }
+        .btn-cancel { padding: 12px; background-color: #eee; color: #333; border: none; font-weight: 600; cursor: pointer; font-size: 13px; }
+        
+        /* Tela de Sucesso de Pagamento */
+        .success-screen { text-align: center; padding: 20px 0; }
+        .pix-qr { width: 150px; height: 150px; background: #eee; margin: 20px auto; display: flex; justify-content: center; align-items: center; font-size: 11px; color: #666; border: 1px solid #ddd; }
+        .boleto-box { background: #f9f9f9; padding: 12px; border: 1px solid #eee; font-family: monospace; font-size: 12px; margin-top: 15px; word-break: break-all; }
+        
+        /* BOTÃO FLUTUANTE DE WHATSAPP FIXO NO CANTO DA TELA */
+        .whatsapp-floating-btn { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 25px; 
+            background-color: #25d366; 
+            color: white; 
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+            z-index: 998; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-decoration: none;
+            font-size: 26px;
+            transition: transform 0.2s, background-color 0.2s; 
+        }
+        .whatsapp-floating-btn:hover { background-color: #128c7e; transform: translateY(-3px) scale(1.05); }
+
         .display-none { display: none; }
-        
-        /* Direitos reservados no canto inferior direito */
         .fixed-footer { position: fixed; bottom: 15px; right: 25px; font-size: 11px; color: #999999; z-index: 998; background-color: rgba(252, 252, 252, 0.8); padding: 2px 6px; border-radius: 2px; pointer-events: none; }
-        
-        /* Responsividade */
-        @media (max-width: 768px) { .header { flex-direction: column; gap: 10px; } .search-container input { width: 100%; } .nav { margin-top: 10px; } .cart-sidebar { width: 100%; right: -100%; } .fixed-footer { right: 10px; bottom: 5px; font-size: 10px; } }
+        @media (max-width: 768px) { .header { flex-direction: column; gap: 10px; } .search-container input { width: 100%; } .nav { margin-top: 10px; } .cart-sidebar { width: 100%; right: -100%; } .fixed-footer { right: 10px; bottom: 5px; font-size: 10px; } .whatsapp-floating-btn { left: 15px; bottom: 15px; width: 45px; height: 45px; font-size: 20px; } }
     </style>
 </head>
 <body>
 
-    <!-- Cabeçalho -->
+    <!-- Botão Flutuante Geral para Suporte e Dúvidas -->
+    <a href="https://whatsapp.com! Estava navegando no site da Tokai e gostaria de tirar algumas dúvidas sobre os instrumentos." target="_blank" class="whatsapp-floating-btn" title="Fale Conosco">
+        💬
+    </a>
+
     <header class="header">
         <div class="logo">TOKAI</div>
         <div class="search-container">
@@ -143,7 +165,6 @@
         </nav>
     </header>
 
-    <!-- Banner Principal -->
     <section id="home" class="hero">
         <div class="hero-waves"></div>
         <div class="hero-bg-text">TOKAI</div> 
@@ -154,7 +175,6 @@
         </div>
     </section>
 
-    <!-- Menu de Naipes (Estrutura de Categorias Restaurada) -->
     <section id="categorias" class="categories-section">
         <h2>Selecione um Naipe</h2>
         <p class="subtitle">Clique para filtrar os instrumentos e valores</p>
@@ -166,7 +186,6 @@
         </div>
     </section>
 
-    <!-- Vitrine de Produtos -->
     <section id="vitrine" class="products-section display-none">
         <h2 id="titulo-categoria">Instrumentos</h2>
         <div class="filter-container">
@@ -180,31 +199,68 @@
         <div class="grid-products" id="lista-produtos"></div>
     </section>
 
-    <!-- Carrinho Lateral -->
     <div id="carrinho-lateral" class="cart-sidebar">
         <div class="cart-header">
             <h3>Seu Carrinho</h3>
             <button class="close-cart" onclick="toggleCarrinho()">&times;</button>
         </div>
-        
         <div id="itens-carrinho" class="cart-items-container"></div>
-        
         <div class="payment-section">
             <label for="forma-pagamento">Forma de Pagamento:</label>
-            <select id="forma-pagamento">
-                <option value="Pix (com 5% de desconto)">Pix</option>
+            <select id="forma-pagamento" onchange="atualizarTextoDoBotaoDoCarrinho()">
+                <option value="Pix">Pix</option>
                 <option value="Cartão de Crédito">Cartão de Crédito</option>
                 <option value="Boleto Bancário">Boleto Bancário</option>
+                <option value="WhatsApp">Negociar e Fechar via WhatsApp</option>
             </select>
         </div>
-
         <div class="cart-footer">
             <div class="cart-total">Total: <span id="valor-total">R$ 0,00</span></div>
-            <button class="btn-checkout" onclick="finalizarCompra()">Enviar via WhatsApp</button>
+            <button class="btn-checkout" id="btn-finalizar-pedido-principal" onclick="gerenciarAcaoDoBotaoDoCarrinho()">Ir para o Pagamento</button>
         </div>
     </div>
 
-    <!-- Rodapé flutuante -->
+    <!-- Janela do Simulador de Checkout Direto (Gateway) -->
+    <div id="modal-checkout" class="checkout-modal display-none">
+        <div class="checkout-box" id="conteudo-checkout-box">
+            <h3>Finalizar Pagamento</h3>
+            <div class="form-group">
+                <label>Nome Completo:</label>
+                <input type="text" id="chk-nome" placeholder="Digite seu nome">
+            </div>
+            <div class="form-group">
+                <label>E-mail:</label>
+                <input type="email" id="chk-email" placeholder="nome@email.com">
+            </div>
+            <div class="form-group">
+                <label>CPF:</label>
+                <input type="text" id="chk-cpf" placeholder="000.000.000-00">
+            </div>
+            
+            <div id="campos-cartao" class="display-none">
+                <div class="form-group">
+                    <label>Número do Cartão:</label>
+                    <input type="text" placeholder="0000 0000 0000 0000">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Validade:</label>
+                        <input type="text" placeholder="MM/AA">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>CVV:</label>
+                        <input type="text" placeholder="000">
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-actions">
+                <button class="btn-cancel" onclick="fecharCheckout()">Voltar</button>
+                <button class="btn-confirm" onclick="processarPagamentoAutomático()">Confirmar e Pagar</button>
+            </div>
+        </div>
+    </div>
+
     <div class="fixed-footer">
         &copy; 2026 Tokai Instrumentos. Todos os direitos reservados.
     </div>
@@ -233,19 +289,15 @@
 
         let carrinho = [];
         let produtosAtuaisNaVitrine = [];
+        let valorTotalGlobal = 0;
 
         function filtrar(categoria) {
             const vitrine = document.getElementById("vitrine");
             const titulo = document.getElementById("titulo-categoria");
-            const seletorFiltro = document.getElementById("ordenar-preco");
-            
-            seletorFiltro.value = "padrao";
-
+            document.getElementById("ordenar-preco").value = "padrao";
             const nomesFormatados = { madeiras: "Naipe de Madeiras", saxofones: "Naipe de Saxofones", metais: "Naipe de Metais", "pianos-orgaos": "Pianos & Órgãos" };
             titulo.innerText = nomesFormatados[categoria];
-            
             produtosAtuaisNaVitrine = [...instrumentos[categoria]];
-            
             renderizarProdutos(produtosAtuaisNaVitrine);
             vitrine.classList.remove("display-none");
             vitrine.scrollIntoView({ behavior: 'smooth' });
@@ -253,19 +305,8 @@
 
         function aplicarFiltroPreco() {
             const tipoOrdem = document.getElementById("ordenar-preco").value;
-            
-            if (tipoOrdem === "menor") {
-                produtosAtuaisNaVitrine.sort((a, b) => a.preco - b.preco);
-            } else if (tipoOrdem === "maior") {
-                produtosAtuaisNaVitrine.sort((a, b) => b.preco - a.preco);
-            } else {
-                const textoTitulo = document.getElementById("titulo-categoria").innerText;
-                if (textoTitulo === "Naipe de Madeiras") produtosAtuaisNaVitrine = [...instrumentos.madeiras];
-                else if (textoTitulo === "Naipe de Saxofones") produtosAtuaisNaVitrine = [...instrumentos.saxofones];
-                else if (textoTitulo === "Naipe de Metais") produtosAtuaisNaVitrine = [...instrumentos.metais];
-                else if (textoTitulo === "Pianos & Órgãos") produtosAtuaisNaVitrine = [...instrumentos["pianos-orgaos"]];
-            }
-            
+            if (tipoOrdem === "menor") produtosAtuaisNaVitrine.sort((a, b) => a.preco - b.preco);
+            else if (tipoOrdem === "maior") produtosAtuaisNaVitrine.sort((a, b) => b.preco - a.preco);
             renderizarProdutos(produtosAtuaisNaVitrine);
         }
 
@@ -293,23 +334,11 @@
         function buscarInstrumento() {
             const termo = document.getElementById("busca-input").value.toLowerCase();
             const vitrine = document.getElementById("vitrine");
-            
-            if (termo.trim() === "") {
-                vitrine.classList.add("display-none");
-                return;
-            }
-
+            if (termo.trim() === "") { vitrine.classList.add("display-none"); return; }
             const todos = [...instrumentos.madeiras, ...instrumentos.saxofones, ...instrumentos.metais, ...instrumentos["pianos-orgaos"]];
-            
-            produtosAtuaisNaVitrine = todos.filter(p => {
-                const nomeFormatado = p.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                const termoFormatado = termo.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                return nomeFormatado.includes(termoFormatado);
-            });
-            
+            produtosAtuaisNaVitrine = todos.filter(p => p.nome.toLowerCase().includes(termo));
             document.getElementById("ordenar-preco").value = "padrao";
             document.getElementById("titulo-categoria").innerText = "Resultado da Busca";
-            
             renderizarProdutos(produtosAtuaisNaVitrine);
             vitrine.classList.remove("display-none");
         }
@@ -318,11 +347,8 @@
 
         function adicionarAoCarrinho(id, nome, preco) {
             const existente = carrinho.find(item => item.id === id);
-            if (existente) {
-                existente.quantidade += 1;
-            } else {
-                carrinho.push({ id: id, nome: nome, preco: preco, quantidade: 1 });
-            }
+            if (existente) existente.quantidade += 1;
+            else carrinho.push({ id: id, nome: nome, preco: preco, quantidade: 1 });
             atualizarCarrinho();
             document.getElementById("carrinho-lateral").classList.add("open");
         }
@@ -338,7 +364,6 @@
             const totalSpan = document.getElementById("valor-total");
             container.innerHTML = "";
             let totalPreco = 0, totalItens = 0;
-            
             carrinho.forEach(item => {
                 totalPreco += (item.preco * item.quantidade);
                 totalItens += item.quantidade;
@@ -350,36 +375,95 @@
                 `;
             });
             contador.innerText = totalItens;
+            valorTotalGlobal = totalPreco;
             totalSpan.innerText = `R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         }
 
-        function finalizarCompra() {
+        function atualizarTextoDoBotaoDoCarrinho() {
+            const forma = document.getElementById("forma-pagamento").value;
+            const btn = document.getElementById("btn-finalizar-pedido-principal");
+            if (forma === "WhatsApp") {
+                btn.innerText = "Enviar via WhatsApp";
+                btn.classList.add("wpp-active");
+            } else {
+                btn.innerText = "Ir para o Pagamento";
+                btn.classList.remove("wpp-active");
+            }
+        }
+
+        function gerenciarAcaoDoBotaoDoCarrinho() {
+            const forma = document.getElementById("forma-pagamento").value;
+            if (forma === "WhatsApp") {
+                enviarPedidoWhatsApp();
+            } else {
+                abrirCheckout();
+            }
+        }
+
+        function abrirCheckout() {
             if(carrinho.length === 0) { alert("Seu carrinho está vazio."); return; }
+            const forma = document.getElementById("forma-pagamento").value;
+            const camposCartao = document.getElementById("campos-cartao");
+            if(forma === "Cartão de Crédito") camposCartao.classList.remove("display-none");
+            else camposCartao.classList.add("display-none");
+            document.getElementById("modal-checkout").classList.remove("display-none");
+            toggleCarrinho();
+        }
+
+        function fecharCheckout() { document.getElementById("modal-checkout").classList.add("display-none"); }
+
+        function processarPagamentoAutomático() {
+            const nome = document.getElementById("chk-nome").value;
+            const email = document.getElementById("chk-email").value;
+            const cpf = document.getElementById("chk-cpf").value;
+            const forma = document.getElementById("forma-pagamento").value;
+            if(!nome || !email || !cpf) { alert("Por favor, preencha todos os campos obrigatórios."); return; }
+            const box = document.getElementById("conteudo-checkout-box");
+            box.innerHTML = `<h3>Processando seu pedido...</h3><p style="font-size:14px;color:#666;">Aguardando retorno do banco intermediário da Tokai.</p>`;
+            setTimeout(() => {
+                box.innerHTML = `<div class="success-screen"><h3 style="color:#111;">Pedido Confirmado!</h3><p style="font-size:14px;color:#555;margin-bottom:15px;">Obrigado, <strong>${nome}</strong>. Seu pagamento de <strong>R$ ${valorTotalGlobal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> foi registrado com sucesso.</p>`;
+                if(forma === "Pix") {
+                    box.innerHTML += `<p style="font-size:13px;color:#666;">Escaneie o QR Code abaixo ou copie o código Pix Copia e Cola para pagar:</p><div class="pix-qr">[ QR CODE DO PIX TOKAI ]</div><div class="boleto-box">https://mercadopago.com.br</div>`;
+                } else if(forma === "Boleto Bancário") {
+                    box.innerHTML += `<p style="font-size:13px;color:#666;">Seu boleto foi gerado. Copie a linha digitável para o pagamento:</p><div class="boleto-box">34191.79001 01043.513184 91020.150008 7 98340000${Math.floor(valorTotalGlobal)}</div>`;
+                } else {
+                    box.innerHTML += `<p style="font-size:13px;color:#25d366;font-weight:600;">💳 Cartão de Crédito aprovado instantaneamente!</p><p style="font-size:12px;color:#777;margin-top:5px;">A cobrança já consta na sua fatura sob o nome TOKAI*INSTRUMENTOS.</p>`;
+                }
+                box.innerHTML += `<button class="btn-confirm" style="margin-top:25px;width:100%;" onclick="fecharECompletar()">Fechar Janela</button></div>`;
+            }, 1500);
+        }
+
+        function enviarPedidoWhatsApp() {
+    if(carrinho.length === 0) { alert("Seu carrinho está vazio."); return; }
+    let totalPreco = 0;
+    let textoMensagem = `Olá, Tokai! Gostaria de fechar um pedido:\n\n*--- ITENS DO PEDIDO ---*\n`;
+    
+    carrinho.forEach(item => {
+        const subtotal = item.preco * item.quantidade;
+        totalPreco += subtotal;
+        textoMensagem += `• ${item.quantidade}x ${item.nome} - (R$ ${subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})})\n`;
+    });
+    
+    textoMensagem += `\n*Forma de Fechamento:* Negociação Direta via WhatsApp\n*Valor Total Estimado:* R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    const textoCodificado = encodeURIComponent(textoMensagem);
+    const numeroWhatsApp = "5511999999999";
+    
+              // Linha corrigida com a API oficial do WhatsApp e interpolação de texto
+            window.open(`https://whatsapp.com{numeroWhatsApp}&text=${textoCodificado}`, '_blank');
             
-            const formaPagamento = document.getElementById("forma-pagamento").value;
-            let totalPreco = 0;
-
-            let textoMensagem = `Olá, Tokai! Gostaria de fechar um pedido:\n\n*--- ITENS DO PEDIDO ---*\n`;
-            
-            carrinho.forEach(item => {
-                const subtotal = item.preco * item.quantidade;
-                totalPreco += subtotal;
-                textoMensagem += `• ${item.quantidade}x ${item.nome} - (R$ ${subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})})\n`;
-            });
-
-            textoMensagem += `\n*Forma de Pagamento:* ${formaPagamento}`;
-            textoMensagem += `\n*Valor Total:* R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-
-            const textoCodificado = encodeURIComponent(textoMensagem);
-            const numeroWhatsApp = "5511999999999";
-            const linkWhatsapp = `https://whatsapp.com{numeroWhatsApp}&text=${textoCodificado}`;
-
-            window.open(linkWhatsapp, '_blank');
-
             carrinho = []; 
             atualizarCarrinho(); 
             toggleCarrinho();
         }
+
+        function fecharECompletar() {
+            fecharCheckout();
+            carrinho = [];
+            atualizarCarrinho();
+            location.reload();
+        }
     </script>
 </body>
 </html>
+
