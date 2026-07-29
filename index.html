@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokai Instrumentos | Loja Completa</title>
+    <style>
+        /* CONFIGURAÇÕES VISUAIS (CSS) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; }
+        body { background-color: #fcfcfc; color: #222222; line-height: 1.6; overflow-x: hidden; }
+        
+        /* Menu Superior */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background-color: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.02); position: sticky; top: 0; z-index: 999; }
+        .logo { font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #111111; }
+        .search-container input { padding: 8px 15px; width: 250px; border: 1px solid #e5e5e5; border-radius: 2px; font-size: 13px; outline: none; transition: border-color 0.3s; }
+        .search-container input:focus { border-color: #111111; }
+        .nav { display: flex; align-items: center; }
+        .nav a { text-decoration: none; color: #666666; margin-left: 25px; font-size: 14px; transition: color 0.3s; }
+        .nav a:hover { color: #111111; }
+        
+        /* Botão do Carrinho */
+        .btn-cart-toggle { background: none; border: 1px solid #111111; padding: 6px 12px; margin-left: 25px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+        .btn-cart-toggle:hover { background-color: #111111; color: #ffffff; }
+        
+        /* Banner Principal com Texto TOKAI de Fundo */
+        .hero { 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://unsplash.com') no-repeat center center/cover; 
+            height: 45vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            color: #ffffff; 
+            padding: 0 20px; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* O texto gigante em negrito por trás de tudo no banner */
+        .hero-bg-text {
+            position: absolute;
+            font-size: 14vw;
+            font-weight: 900;
+            letter-spacing: 10px;
+            color: rgba(255, 255, 255, 0.06);
+            user-select: none;
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content h1 { font-size: 36px; font-weight: 300; margin-bottom: 15px; }
+        .hero-content p { font-size: 15px; margin-bottom: 25px; color: #d1d1d1; }
+        .btn { display: inline-block; padding: 12px 30px; background-color: #ffffff; color: #111111; text-decoration: none; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Seção de Naipes */
+        .categories-section { padding: 60px 8% 40px 8%; text-align: center; }
+        .categories-section h2 { font-size: 24px; font-weight: 400; }
+        .subtitle { color: #888888; margin-bottom: 40px; font-size: 14px; }
+        .grid-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .card { background-color: #ffffff; padding: 30px 20px; border: 1px solid #e5e5e5; cursor: pointer; transition: all 0.2s; }
+        .card:hover { border-color: #111111; background-color: #fbfbfb; }
+        .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        .card p { font-size: 13px; color: #777777; }
+        
+        /* Vitrine de Produtos */
+        .products-section { padding: 50px 8%; background-color: #f7f7f7; text-align: center; border-top: 1px solid #eeeeee; }
+        .products-section h2 { font-size: 22px; font-weight: 400; margin-bottom: 40px; text-transform: uppercase; }
+        .grid-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+        .product-item { background-color: #ffffff; border: 1px solid #e5e5e5; padding: 20px; text-align: left; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-img { width: 100%; height: 180px; object-fit: contain; background: #ffffff; margin-bottom: 15px; padding: 10px; }
+        .product-item h4 { font-size: 15px; color: #111111; }
+        .product-price { font-size: 16px; font-weight: 600; margin: 8px 0 15px 0; }
+        .btn-buy { display: block; text-align: center; padding: 10px; background-color: #111111; color: #ffffff; border: none; width: 100%; font-size: 12px; font-weight: 600; cursor: pointer; }
+        
+        /* Carrinho de Compras Lateral */
+        .cart-sidebar { position: fixed; top: 0; right: -350px; width: 350px; height: 100vh; background-color: #ffffff; box-shadow: -5px 0 15px rgba(0,0,0,0.05); z-index: 1000; display: flex; flex-direction: column; transition: right 0.3s ease; }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .close-cart { background: none; border: none; font-size: 24px; cursor: pointer; }
+        .cart-items-container { flex: 1; padding: 20px; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+        .cart-item-remove { background: none; border: none; color: #cc0000; cursor: pointer; font-size: 11px; }
+        
+        /* Seção de Pagamento Interna */
+        .payment-section { padding: 15px 20px; border-top: 1px solid #eee; background-color: #fcfcfc; }
+        .payment-section label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #555; }
+        .payment-section select { width: 100%; padding: 8px; border: 1px solid #e5e5e5; font-size: 13px; outline: none; background: white; }
+        
+        /* Rodapé do Carrinho */
+        .cart-footer { padding: 20px; border-top: 1px solid #eee; background-color: #fafafa; }
+        .cart-total { font-size: 16px; font-weight: 600; display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .btn-checkout { width: 100%; padding: 12px; background-color: #25d366; color: #ffffff; border: none; font-weight: 600; cursor: pointer; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; transition: background-color 0.3s; }
+        .btn-checkout:hover { background-color: #128c7e; }
+        
+        /* Classes Utilitárias */
+        .display-none { display: none; }
+        footer { background-color: #111111; color: #777777; text-align: center; padding: 40px 20px; font-size: 12px; }
+        
+        /* Responsividade */
+        @media (max-width: 768px) { .header { flex-direction: column; gap: 10px; } .search-container input { width: 100%; } .nav { margin-top: 10px; } .cart-sidebar { width: 100%; right: -100%; } }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="logo">TOKAI</div>
+        <div class="search-container">
+            <input type="text" id="busca-input" placeholder="Buscar instrumento..." oninput="buscarInstrumento()">
+        </div>
+        <nav class="nav">
+            <a href="#home">Início</a>
+            <a href="#categorias">Naipes</a>
+            <a href="#vitrine">Catálogo</a>
+            <button class="btn-cart-toggle" onclick="toggleCarrinho()">Carrinho (<span id="cart-count">0</span>)</button>
+        </nav>
+    </header>
+
+    <!-- Banner Modificado -->
+    <section id="home" class="hero">
+        <div class="hero-bg-text">TOKAI</div> <!-- Marca d'água em negrito ao fundo -->
+        <div class="hero-content">
+            <h1>A música em sua forma mais pura.</h1>
+            <p>Design minimalista, som excepcional. Escolha o seu naipe abaixo.</p>
+            <a href="#categorias" class="btn">Explorar Naipes</a>
+        </div>
+    </section>
+
+    <!-- Menu de Naipes -->
+    <section id="categorias" class="categories-section">
+        <h2>Selecione um Naipe</h2>
+        <p class="subtitle">Clique para filtrar os instrumentos e valores</p>
+        <div class="grid-categories">
+            <div class="card" onclick="filtrar('madeiras')"><h3>Madeiras</h3><p>Flautas e Clarinetes</p></div>
+            <div class="card" onclick="filtrar('saxofones')"><h3>Saxofones</h3><p>Alto, Tenor e Soprano</p></div>
+            <div class="card" onclick="filtrar('metais')"><h3>Metais</h3><p>Trompetes e Tuba</p></div>
+            <div class="card" onclick="filtrar('pianos-orgaos')"><h3>Pianos e Órgãos</h3><p>Acústicos e Digitais</p></div>
+        </div>
+    </section>
+
+    <!-- Vitrine de Produtos -->
+    <section id="vitrine" class="products-section display-none">
+        <h2 id="titulo-categoria">Instrumentos</h2>
+        <div class="grid-products" id="lista-produtos"></div>
+    </section>
+    <!-- Carrinho Lateral -->
+    <div id="carrinho-lateral" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Seu Carrinho</h3>
+            <button class="close-cart" onclick="toggleCarrinho()">&times;</button>
+        </div>
+        
+        <div id="itens-carrinho" class="cart-items-container"></div>
+        
+        <div class="payment-section">
+            <label for="forma-pagamento">Forma de Pagamento:</label>
+            <select id="forma-pagamento">
+                <option value="Pix (com 5% de desconto)">Pix</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Boleto Bancário">Boleto Bancário</option>
+            </select>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">Total: <span id="valor-total">R$ 0,00</span></div>
+            <button class="btn-checkout" onclick="finalizarCompra()">Enviar via WhatsApp</button>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2026 Tokai Instrumentos. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        /* LÓGICA DE INTERAÇÃO (JAVASCRIPT) */
+        const instrumentos = {
+            madeiras: [
+                { id: 1, nome: "Flauta transversal Tokai TFL-400Pg", preco: 3500.00, img: "imagens/flauta.jpg" },
+                { id: 2, nome: "Clarinete Bb Soprano Elegance", preco: 3190.00, img: "imagens/clarinete.jpg" }
+            ],
+            saxofones: [
+                { id: 3, nome: "Saxofone Alto Professional Gold", preco: 6800.00, img: "imagens/sax-alto.jpg" },
+                { id: 4, nome: "Saxofone Tenor Vintage Black Edition", preco: 8250.00, img: "imagens/sax-tenor.jpg" }
+            ],
+            metais: [
+                { id: 5, nome: "Trompete Bb Performance Brass", preco: 2900.00, img: "https://unsplash.com" },
+                { id: 6, nome: "Tuba Sib Tokai TB-200L", preco: 9850.00, img: "imagens/tuba.jpg" }
+            ],
+            "pianos-orgaos": [
+                { id: 7, nome: "Piano Digital Tokai TP-288 Preto", preco: 5990.00, img: "imagens/piano-tp288.jpg" },
+                { id: 8, nome: "Órgão Eletrônico Tokai MD-5 Wengue", preco: 7876.00, img: "imagens/orgao-md5.jpg" },
+                { id: 9, nome: "Órgão Eletrônico Tokai T-1 Spinet", preco: 6500.00, img: "imagens/orgao-t1.jpg" },
+                { id: 10, nome: "Piano Digital Tokai TP-88C Cauda Branco", preco: 14460.00, img: "imagens/piano-cauda.jpg" }
+            ]
+        };
+
+        let carrinho = [];
+
+        function filtrar(categoria) {
+            const vitrine = document.getElementById("vitrine");
+            const titulo = document.getElementById("titulo-categoria");
+            const nomesFormatados = { madeiras: "Naipe de Madeiras", saxofones: "Naipe de Saxofones", metais: "Naipe de Metais", "pianos-orgaos": "Pianos & Órgãos" };
+            titulo.innerText = nomesFormatados[categoria];
+            renderizarProdutos(instrumentos[categoria]);
+            vitrine.classList.remove("display-none");
+            vitrine.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderizarProdutos(lista) {
+            const container = document.getElementById("lista-produtos");
+            container.innerHTML = "";
+            if(lista.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; color: #888; padding: 20px 0;">Nenhum instrumento encontrado.</p>`;
+                return;
+            }
+            lista.forEach(p => {
+                container.innerHTML += `
+                    <div class="product-item">
+                        <img src="${p.img}" alt="${p.nome}" class="product-img">
+                        <div>
+                            <h4>${p.nome}</h4>
+                            <p class="product-price">R$ ${p.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        </div>
+                        <button class="btn-buy" onclick="adicionarAoCarrinho(${p.id}, '${p.nome}', ${p.preco})">Adicionar ao Carrinho</button>
+                    </div>
+                `;
+            });
+        }
+
+        function buscarInstrumento() {
+            const termo = document.getElementById("busca-input").value.toLowerCase();
+            const todos = [...instrumentos.madeiras, ...instrumentos.saxofones, ...instrumentos.metais, ...instrumentos["pianos-orgaos"]];
+            const filtrados = todos.filter(p => p.nome.toLowerCase().includes(termo));
+            document.getElementById("titulo-categoria").innerText = "Resultado da Busca";
+            renderizarProdutos(filtrados);
+            document.getElementById("vitrine").classList.remove("display-none");
+        }
+
+        function toggleCarrinho() { document.getElementById("carrinho-lateral").classList.toggle("open"); }
+
+        function adicionarAoCarrinho(id, nome, preco) {
+            const existente = carrinho.find(item => item.id === id);
+            if (existente) {
+                existente.quantidade += 1;
+            } else {
+                carrinho.push({ id: id, nome: nome, preco: preco, quantidade: 1 });
+            }
+            atualizarCarrinho();
+            document.getElementById("carrinho-lateral").classList.add("open");
+        }
+
+        function removerDoCarrinho(id) {
+            carrinho = carrinho.filter(item => item.id !== id);
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const container = document.getElementById("itens-carrinho");
+            const contador = document.getElementById("cart-count");
+            const totalSpan = document.getElementById("valor-total");
+            container.innerHTML = "";
+            let totalPreco = 0, totalItens = 0;
+            
+            carrinho.forEach(item => {
+                totalPreco += (item.preco * item.quantidade);
+                totalItens += item.quantidade;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div><strong>${item.nome}</strong><br>${item.quantidade}x - R$ ${item.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <button class="cart-item-remove" onclick="removerDoCarrinho(${item.id})">Remover</button>
+                    </div>
+                `;
+            });
+            contador.innerText = totalItens;
+            totalSpan.innerText = `R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        }
+
+        function finalizarCompra() {
+            if(carrinho.length === 0) { alert("Seu carrinho está vazio."); return; }
+            
+            const formaPagamento = document.getElementById("forma-pagamento").value;
+            let totalPreco = 0;
+
+            let textoMensagem = `Olá, Tokai! Gostaria de fechar um pedido:\n\n*--- ITENS DO PEDIDO ---*\n`;
+            
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.quantidade;
+                totalPreco += subtotal;
+                textoMensagem += `• ${item.quantidade}x ${item.nome} - (R$ ${subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})})\n`;
+            });
+
+            textoMensagem += `\n*Forma de Pagamento:* ${formaPagamento}`;
+            textoMensagem += `\n*Valor Total:* R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+            const textoCodificado = encodeURIComponent(textoMensagem);
+            const numeroWhatsApp = "5511999999999";
+            const linkWhatsapp = `https://whatsapp.com{numeroWhatsApp}&text=${textoCodificado}`;
+
+            window.open(linkWhatsapp, '_blank');
+
+            carrinho = []; 
+            atualizarCarrinho(); 
+            toggleCarrinho();
+        }
+    </script>
+</body>
+</html>
