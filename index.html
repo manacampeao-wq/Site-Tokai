@@ -159,8 +159,8 @@
         </div>
         <nav class="nav">
             <a href="#home">Início</a>
-            <a href="#categorias">Naipes</a>
-            <a href="#vitrine">Catálogo</a>
+            <!-- Ajustado link do menu para disparar a vitrine completa -->
+            <a href="#vitrine" onclick="mostrarTodosNoCatalogo()">Catálogo</a>
             <button class="btn-cart-toggle" onclick="toggleCarrinho()">Carrinho (<span id="cart-count">0</span>)</button>
         </nav>
     </header>
@@ -170,8 +170,9 @@
         <div class="hero-bg-text">TOKAI</div> 
         <div class="hero-content">
             <h1>A música em sua forma mais pura.</h1>
-            <p>Design minimalista, som excepcional. Escolha o seu naipe abaixo.</p>
-            <a href="#categorias" class="btn">Explorar Naipes</a>
+            <p>Design minimalista, som exceptional. Escolha o seu naipe abaixo.</p>
+            <!-- Ajustado botão do banner para disparar a vitrine completa -->
+            <button onclick="mostrarTodosNoCatalogo()" class="btn" style="border:none; cursor:pointer;">Explorar Catálogo</button>
         </div>
     </section>
 
@@ -291,6 +292,27 @@
         let produtosAtuaisNaVitrine = [];
         let valorTotalGlobal = 0;
 
+        /* NOVA FUNÇÃO: ABRE O CATÁLOGO EXIBINDO TODOS OS INSTRUMENTOS DA LOJA */
+        function mostrarTodosNoCatalogo() {
+            const vitrine = document.getElementById("vitrine");
+            const titulo = document.getElementById("titulo-categoria");
+            document.getElementById("ordenar-preco").value = "padrao";
+            
+            titulo.innerText = "Todos os Instrumentos";
+            
+            // Reúne os instrumentos de todos os naipes em um único array plano
+            produtosAtuaisNaVitrine = [
+                ...instrumentos.madeiras, 
+                ...instrumentos.saxofones, 
+                ...instrumentos.metais, 
+                ...instrumentos["pianos-orgaos"]
+            ];
+            
+            renderizarProdutos(produtosAtuaisNaVitrine);
+            vitrine.classList.remove("display-none");
+            vitrine.scrollIntoView({ behavior: 'smooth' });
+        }
+
         function filtrar(categoria) {
             const vitrine = document.getElementById("vitrine");
             const titulo = document.getElementById("titulo-categoria");
@@ -307,6 +329,16 @@
             const tipoOrdem = document.getElementById("ordenar-preco").value;
             if (tipoOrdem === "menor") produtosAtuaisNaVitrine.sort((a, b) => a.preco - b.preco);
             else if (tipoOrdem === "maior") produtosAtuaisNaVitrine.sort((a, b) => b.preco - a.preco);
+            else {
+                // Se voltar ao padrão de ordenação, checa qual visualização recarregar
+                const textoTitulo = document.getElementById("titulo-categoria").innerText;
+                if (textoTitulo === "Todos os Instrumentos") {
+                    produtosAtuaisNaVitrine = [...instrumentos.madeiras, ...instrumentos.saxofones, ...instrumentos.metais, ...instrumentos["pianos-orgaos"]];
+                } else if (textoTitulo === "Naipe de Madeiras") produtosAtuaisNaVitrine = [...instrumentos.madeiras];
+                else if (textoTitulo === "Naipe de Saxofones") produtosAtuaisNaVitrine = [...instrumentos.saxofones];
+                else if (textoTitulo === "Naipe de Metais") produtosAtuaisNaVitrine = [...instrumentos.metais];
+                else if (textoTitulo === "Pianos & Órgãos") produtosAtuaisNaVitrine = [...instrumentos["pianos-orgaos"]];
+            }
             renderizarProdutos(produtosAtuaisNaVitrine);
         }
 
@@ -393,11 +425,8 @@
 
         function gerenciarAcaoDoBotaoDoCarrinho() {
             const forma = document.getElementById("forma-pagamento").value;
-            if (forma === "WhatsApp") {
-                enviarPedidoWhatsApp();
-            } else {
-                abrirCheckout();
-            }
+            if (forma === "WhatsApp") enviarPedidoWhatsApp();
+            else abrirCheckout();
         }
 
         function abrirCheckout() {
@@ -412,44 +441,76 @@
 
         function fecharCheckout() { document.getElementById("modal-checkout").classList.add("display-none"); }
 
+            function processarPagamentoAutomático() {}
+            const nome = document.getElementById("chk-nome").value;
+            const email = document.getElementById("chk-email").value;
+            const cpf = document.getElementById("chk-cpf").value;
+            const forma = document.getElementById("forma-pagamento").value;
         function processarPagamentoAutomático() {
             const nome = document.getElementById("chk-nome").value;
             const email = document.getElementById("chk-email").value;
             const cpf = document.getElementById("chk-cpf").value;
             const forma = document.getElementById("forma-pagamento").value;
-            if(!nome || !email || !cpf) { alert("Por favor, preencha todos os campos obrigatórios."); return; }
+            
+            if(!nome || !email || !cpf) { 
+                alert("Por favor, preencha todos os campos obrigatórios."); 
+                return; 
+            }
+            
             const box = document.getElementById("conteudo-checkout-box");
             box.innerHTML = `<h3>Processando seu pedido...</h3><p style="font-size:14px;color:#666;">Aguardando retorno do banco intermediário da Tokai.</p>`;
+            
             setTimeout(() => {
-                box.innerHTML = `<div class="success-screen"><h3 style="color:#111;">Pedido Confirmado!</h3><p style="font-size:14px;color:#555;margin-bottom:15px;">Obrigado, <strong>${nome}</strong>. Seu pagamento de <strong>R$ ${valorTotalGlobal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> foi registrado com sucesso.</p>`;
+                box.innerHTML = `
+                    <div class="success-screen">
+                        <h3 style="color:#111;">Pedido Confirmado!</h3>
+                        <p style="font-size:14px;color:#555;margin-bottom:15px;">Obrigado, <strong>${nome}</strong>. Seu pagamento de <strong>R$ ${valorTotalGlobal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong> foi registrado com sucesso.</p>
+                `;
+                
                 if(forma === "Pix") {
-                    box.innerHTML += `<p style="font-size:13px;color:#666;">Escaneie o QR Code abaixo ou copie o código Pix Copia e Cola para pagar:</p><div class="pix-qr">[ QR CODE DO PIX TOKAI ]</div><div class="boleto-box">https://mercadopago.com.br</div>`;
+                    box.innerHTML += `
+                        <p style="font-size:13px;color:#666;">Escaneie o QR Code abaixo ou copie o código Pix Copia e Cola para pagar:</p>
+                        <div class="pix-qr">[ QR CODE DO PIX TOKAI ]</div>
+                        <div class="boleto-box">https://www.mercadopago.com.br</div>
+                    `;
                 } else if(forma === "Boleto Bancário") {
-                    box.innerHTML += `<p style="font-size:13px;color:#666;">Seu boleto foi gerado. Copie a linha digitável para o pagamento:</p><div class="boleto-box">34191.79001 01043.513184 91020.150008 7 98340000${Math.floor(valorTotalGlobal)}</div>`;
+                    box.innerHTML += `
+                        <p style="font-size:13px;color:#666;">Seu boleto foi gerado. Copie a linha digitável para o pagamento:</p>
+                        <div class="boleto-box">34191.79001 01043.513184 91020.150008 7 98340000${Math.floor(valorTotalGlobal)}</div>
+                    `;
                 } else {
-                    box.innerHTML += `<p style="font-size:13px;color:#25d366;font-weight:600;">💳 Cartão de Crédito aprovado instantaneamente!</p><p style="font-size:12px;color:#777;margin-top:5px;">A cobrança já consta na sua fatura sob o nome TOKAI*INSTRUMENTOS.</p>`;
+                    box.innerHTML += `
+                        <p style="font-size:13px;color:#25d366;font-weight:600;">💳 Cartão de Crédito aprovado instantaneamente!</p>
+                        <p style="font-size:12px;color:#777;margin-top:5px;">A cobrança já consta na sua fatura sob o nome TOKAI*INSTRUMENTOS.</p>
+                    `;
                 }
-                box.innerHTML += `<button class="btn-confirm" style="margin-top:25px;width:100%;" onclick="fecharECompletar()">Fechar Janela</button></div>`;
+                
+                box.innerHTML += `
+                        <button class="btn-confirm" style="margin-top:25px;width:100%;" onclick="fecharECompletar()">Fechar Janela</button>
+                    </div>
+                `;
             }, 1500);
         }
 
         function enviarPedidoWhatsApp() {
-    if(carrinho.length === 0) { alert("Seu carrinho está vazio."); return; }
-    let totalPreco = 0;
-    let textoMensagem = `Olá, Tokai! Gostaria de fechar um pedido:\n\n*--- ITENS DO PEDIDO ---*\n`;
-    
-    carrinho.forEach(item => {
-        const subtotal = item.preco * item.quantidade;
-        totalPreco += subtotal;
-        textoMensagem += `• ${item.quantidade}x ${item.nome} - (R$ ${subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})})\n`;
-    });
-    
-    textoMensagem += `\n*Forma de Fechamento:* Negociação Direta via WhatsApp\n*Valor Total Estimado:* R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-    
-    const textoCodificado = encodeURIComponent(textoMensagem);
-    const numeroWhatsApp = "5511999999999";
-    
-              // Linha corrigida com a API oficial do WhatsApp e interpolação de texto
+            if(carrinho.length === 0) { 
+                alert("Seu carrinho está vazio."); 
+                return; 
+            }
+            let totalPreco = 0;
+            let textoMensagem = `Olá, Tokai! Gostaria de fechar um pedido:\n\n*--- ITENS DO PEDIDO ---*\n`;
+            
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.quantidade;
+                totalPreco += subtotal;
+                textoMensagem += `• ${item.quantidade}x ${item.nome} - (R$ ${subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})})\n`;
+            });
+            
+            textoMensagem += `\n*Forma de Fechamento:* Negociação Direta via WhatsApp\n*Valor Total Estimado:* R$ ${totalPreco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            
+            const textoCodificado = encodeURIComponent(textoMensagem);
+            const numeroWhatsApp = "5511999999999";
+            
             window.open(`https://whatsapp.com{numeroWhatsApp}&text=${textoCodificado}`, '_blank');
             
             carrinho = []; 
@@ -457,13 +518,12 @@
             toggleCarrinho();
         }
 
-        function fecharECompletar() {
-            fecharCheckout();
-            carrinho = [];
-            atualizarCarrinho();
-            location.reload();
+        function fecharECompletar() { 
+            fecharCheckout(); 
+            carrinho = []; 
+            atualizarCarrinho(); 
+            location.reload(); 
         }
     </script>
 </body>
 </html>
-
